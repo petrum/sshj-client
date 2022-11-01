@@ -9,10 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3b4ded70-6d1b-434a-8c4e-1f97bf7a3d45" name="Changes" comment="added screenshot with ext dep">
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/sshj_client_main_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/sshj_client_main_jar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="3b4ded70-6d1b-434a-8c4e-1f97bf7a3d45" name="Changes" comment="added logging" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -97,7 +94,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667480170089</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="added logging">
+      <created>1667507315728</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1667507315728</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -114,6 +118,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="get it to work with parameter" />
     <MESSAGE value="added screenshot with ext dep" />
-    <option name="LAST_COMMIT_MESSAGE" value="added screenshot with ext dep" />
+    <MESSAGE value="added logging" />
+    <option name="LAST_COMMIT_MESSAGE" value="added logging" />
   </component>
 </project>
