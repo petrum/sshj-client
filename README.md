@@ -10,7 +10,7 @@ dependencies {
 }
 ```
 5. you might need to "File/Repair IDE" to get the right info in "File/External Dependecies". This is how it should look:
-![Ext dep](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
+![Ext dep](https://github.com/petrum/sshj-client/blob/master/external-dep.png?raw=true)
 6. In order run in CLI you need to go into "File/Project Structure.../Actifact" and add a JAR "From module with dep" etc
 7. then you "Build/Build Artifacts..."
 8. remove the signature files generating the error:
