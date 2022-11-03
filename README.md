@@ -14,8 +14,11 @@ dependencies {
 ![Ext dep](https://github.com/petrum/sshj-client/blob/master/external-dep.png?raw=true)
 
 6. In order run in CLI outside IDE you need to go into "File/Project Structure.../Actifact" and add a JAR "From module with dep" etc
-7. then you "Build/Build Artifacts..."
-8. remove the signature files generating the error:
+
+![Ext dep](https://github.com/petrum/sshj-client/blob/master/artifact.png?raw=true)
+
+8. then you "Build/Build Artifacts..."
+9. remove the signature files generating the error:
 ```
 petrum@gram /mnt/c/Users/petru/IdeaProjects/sshj-client/out/artifacts/sshj_client_main_jar[master*]$ java -cp sshj-client.main.jar MainKt www.petrum.net 22223 petrum **** 'uname -a'
 Error: A JNI error has occurred, please check your installation and try again
