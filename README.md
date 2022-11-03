@@ -1,7 +1,7 @@
 # sshj-client
-1. create with wizard a Kotlin project with gradle
-2. added code in Main.kt
-3. in build.gradle.kts file press Alt + Ins, then type in filter "sshj", add this dependency, as well as "slf4j-simple":
+1. create a Kotlin project in IntelliJ IDEA, with the wizard, using gradle
+2. added the sshj client code in Main.kt
+3. in build.gradle.kts file press Alt + Ins, then type "sshj" in search, add this dependency, as well as "slf4j-simple" (used by sshj):
 ```
 dependencies {
     implementation("com.hierynomus:sshj:0.34.0")
@@ -9,8 +9,11 @@ dependencies {
     testImplementation(kotlin("test"))
 }
 ```
-5. you might need to "File/Repair IDE" to get the right info in "File/External Dependecies"
-6. In order run in CLI you need to go into "File/Project Structure.../Actifact" and add a JAR "From module with dep" etc
+5. you might need to "File/Repair IDE" to get the right info in "File/External Dependecies". This is how it should look:
+
+![Ext dep](https://github.com/petrum/sshj-client/blob/master/external-dep.png?raw=true)
+
+6. In order run in CLI outside IDE you need to go into "File/Project Structure.../Actifact" and add a JAR "From module with dep" etc
 7. then you "Build/Build Artifacts..."
 8. remove the signature files generating the error:
 ```
