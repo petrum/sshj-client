@@ -14,6 +14,7 @@ repositories {
 
 dependencies {
     implementation("com.hierynomus:sshj:0.34.0")
+    implementation("org.slf4j:slf4j-simple:2.0.3")
     testImplementation(kotlin("test"))
 }
 
