@@ -13,6 +13,7 @@ repositories {
 }
 
 dependencies {
+    implementation("com.hierynomus:sshj:0.34.0")
     testImplementation(kotlin("test"))
 }
 
