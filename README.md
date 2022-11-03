@@ -1,11 +1,18 @@
 # sshj-client
 1. create with wizard a Kotlin project with gradle
 2. added code in Main.kt
-3. in build.gradle.kts file press Alt + Ins, then type in filter "sshj", add this dependency
-4. you might need to "File/Repair IDE" to get the right info in "File/External Dependecies"
-5. In order run in CLI you need to go into "File/Project Structure.../Actifact" and add a JAR "From module with dep" etc
-6. then you "Build/Build Artifacts..."
-7. remove the signature files generating the error:
+3. in build.gradle.kts file press Alt + Ins, then type in filter "sshj", add this dependency, as well as "slf4j-simple":
+```
+dependencies {
+    implementation("com.hierynomus:sshj:0.34.0")
+    implementation("org.slf4j:slf4j-simple:2.0.3")
+    testImplementation(kotlin("test"))
+}
+```
+5. you might need to "File/Repair IDE" to get the right info in "File/External Dependecies"
+6. In order run in CLI you need to go into "File/Project Structure.../Actifact" and add a JAR "From module with dep" etc
+7. then you "Build/Build Artifacts..."
+8. remove the signature files generating the error:
 ```
 petrum@gram /mnt/c/Users/petru/IdeaProjects/sshj-client/out/artifacts/sshj_client_main_jar[master*]$ java -cp sshj-client.main.jar MainKt www.petrum.net 22223 petrum **** 'uname -a'
 Error: A JNI error has occurred, please check your installation and try again
