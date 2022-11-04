@@ -19,8 +19,7 @@ fun auth(client: SSHClient, username: String, s: String)
 }
 private val log = KotlinLogging.logger {}
 fun main(args: Array<String>) {
-
-    log.info("This is an info level log message!")
+    log.info {"This is an info level log message!"}
     println("Program arguments: ${args.joinToString()}")
     //https://www.javadoc.io/doc/com.hierynomus/sshj/0.11.0/net/schmizz/sshj/SSHClient.html
     val ssh = SSHClient()
