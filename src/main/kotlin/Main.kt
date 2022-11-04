@@ -5,6 +5,10 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 
 import mu.KotlinLogging
+import java.security.KeyPair
+import java.security.*;
+import java.util.*;
+
 private val log = KotlinLogging.logger {}
 fun auth(client: SSHClient, username: String, s: String)
 {
@@ -17,10 +21,25 @@ fun auth(client: SSHClient, username: String, s: String)
         client.authPassword(username, s)
     }
 }
+
+fun genKeys()
+{
+    try {
+        val kpg = KeyPairGenerator.getInstance("RSA");
+        kpg.initialize(1024);
+        val kp = kpg.genKeyPair();
+        System.out.println("Keypair : " + kp.toString());
+    }
+    catch (e: NoSuchAlgorithmException) {
+        System.out.println("Exception thrown : " + e);
+    }
+}
+
 fun main(args: Array<String>) {
     //log.info{"Hello world!".toInt()}
     log.info("Program arguments: ${args.joinToString()}")
     //https://www.javadoc.io/doc/com.hierynomus/sshj/0.11.0/net/schmizz/sshj/SSHClient.html
+    genKeys()
     val ssh = SSHClient()
     ssh.loadKnownHosts()
     ssh.connect(args[0], args[1].toInt())
