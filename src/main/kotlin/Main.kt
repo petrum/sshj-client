@@ -1,13 +1,11 @@
+import mu.KotlinLogging
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.common.IOUtils
 import net.schmizz.sshj.userauth.keyprovider.KeyProvider
 import java.io.File
+import java.security.*
+import java.util.*
 import java.util.concurrent.TimeUnit
-
-import mu.KotlinLogging
-import java.security.KeyPair
-import java.security.*;
-import java.util.*;
 
 private val log = KotlinLogging.logger {}
 fun auth(client: SSHClient, username: String, s: String)
@@ -25,10 +23,14 @@ fun auth(client: SSHClient, username: String, s: String)
 fun genKeys()
 {
     try {
-        val kpg = KeyPairGenerator.getInstance("RSA");
-        kpg.initialize(1024);
-        val kp = kpg.genKeyPair();
-        System.out.println("Keypair : " + kp.toString());
+        val kpg = KeyPairGenerator.getInstance("RSA")
+        kpg.initialize(2048)
+        val kp = kpg.genKeyPair()
+        val priKey: PrivateKey = kp.getPrivate()
+        val pubKey: PublicKey = kp.getPublic()
+        System.out.println("Keypair : " + kp.toString())
+        System.out.println("priKey : " + priKey.toString());
+        System.out.println("pubKey : " + pubKey.toString());
     }
     catch (e: NoSuchAlgorithmException) {
         System.out.println("Exception thrown : " + e);
