@@ -14,8 +14,11 @@ dependencies {
 ![Ext dep](https://github.com/petrum/sshj-client/blob/master/external-dep.png?raw=true)
 
 6. In order run in CLI outside IDE you need to go into "File/Project Structure.../Actifact" and add a JAR "From module with dep" etc
-7. then you "Build/Build Artifacts..."
-8. remove the signature files generating the error:
+
+![Ext dep](https://github.com/petrum/sshj-client/blob/master/artifact.png?raw=true)
+
+8. then you "Build/Build Artifacts..."
+9. remove the signature files generating the error:
 ```
 petrum@gram /mnt/c/Users/petru/IdeaProjects/sshj-client/out/artifacts/sshj_client_main_jar[master*]$ java -cp sshj-client.main.jar MainKt www.petrum.net 22223 petrum **** 'uname -a'
 Error: A JNI error has occurred, please check your installation and try again
@@ -28,11 +31,12 @@ deleting: META-INF/BC2048KE.SF
 ```
 8. finally you run it successful:
 ```
-petrum@gram /mnt/c/Users/petru/IdeaProjects/sshj-client/out/artifacts/sshj_client_main_jar[master*]$ java -cp sshj-client.main.jar MainKt www.petrum.net 22223 petrum **** 'uname -a'
-Program arguments: www.petrum.net, 22223, petrum, ****, uname -a
-SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
-SLF4J: Defaulting to no-operation (NOP) logger implementation
-SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+petrum@gram /mnt/c/Users/petru/IdeaProjects/sshj-client/out/artifacts/sshj_client_main_jar[master*]$ java -cp sshj-client.main.jar MainKt www.petrum.net 22223 petrum /mnt/c/Users/petru/.ssh/id_rsa 'uname -a'
+Program arguments: www.petrum.net, 22223, petrum, /mnt/c/Users/petru/.ssh/id_rsa, uname -a
+[main] INFO net.schmizz.sshj.transport.random.JCERandom - Creating new SecureRandom.
+[main] INFO net.schmizz.sshj.transport.TransportImpl - Client identity string: SSH-2.0-SSHJ_0.34.0
+[main] INFO net.schmizz.sshj.transport.TransportImpl - Server identity string: SSH-2.0-OpenSSH_8.9p1 Ubuntu-3
+[main] INFO com.hierynomus.sshj.userauth.keyprovider.OpenSSHKeyV1KeyFile - Read key type: ssh-rsa
 < session channel: id=0, recipient=0, localWin=[winSize=2097049], remoteWin=[winSize=2097152] >
 Linux nuc 5.15.0-52-generic #58-Ubuntu SMP Thu Oct 13 08:03:55 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
 ```
