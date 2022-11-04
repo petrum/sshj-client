@@ -18,8 +18,7 @@ fun auth(client: SSHClient, username: String, s: String)
     }
 }
 fun main(args: Array<String>) {
-    log.info {"This is an info level log message!"}
-    println("Program arguments: ${args.joinToString()}")
+    log.info("Program arguments: ${args.joinToString()}")
     //https://www.javadoc.io/doc/com.hierynomus/sshj/0.11.0/net/schmizz/sshj/SSHClient.html
     val ssh = SSHClient()
     ssh.loadKnownHosts()
@@ -30,7 +29,7 @@ fun main(args: Array<String>) {
         try {
             val cmd = session.exec(args[4])
             cmd.join(1, TimeUnit.SECONDS)
-            System.out.println(cmd)
+            log.info(cmd.toString())
             System.out.println(IOUtils.readFully(cmd.getInputStream()).toString())
         } finally {
             session.close()
