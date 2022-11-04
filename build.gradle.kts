@@ -10,11 +10,16 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    maven {
+        url = uri("https://repo.clojars.org")
+        name = "Clojars"
+    }
 }
 
 dependencies {
     implementation("com.hierynomus:sshj:0.34.0")
     implementation("org.slf4j:slf4j-simple:2.0.3")
+    implementation("io.github.microutils:kotlin-logging-jvm:3.0.3")
     testImplementation(kotlin("test"))
 }
 
