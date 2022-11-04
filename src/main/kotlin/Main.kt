@@ -3,9 +3,11 @@ import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.common.IOUtils
 import net.schmizz.sshj.userauth.keyprovider.KeyProvider
 import java.io.File
+import java.io.FileOutputStream
 import java.security.*
 import java.util.*
 import java.util.concurrent.TimeUnit
+
 
 private val log = KotlinLogging.logger {}
 fun auth(client: SSHClient, username: String, s: String)
@@ -29,8 +31,8 @@ fun genKeys()
         val priKey: PrivateKey = kp.getPrivate()
         val pubKey: PublicKey = kp.getPublic()
         System.out.println("Keypair : " + kp.toString())
-        System.out.println("priKey : " + priKey.toString());
-        System.out.println("pubKey : " + pubKey.toString());
+        System.out.println("priKey : " + priKey.toString())
+        System.out.println("pubKey : " + kp.public.toString())
     }
     catch (e: NoSuchAlgorithmException) {
         System.out.println("Exception thrown : " + e);
