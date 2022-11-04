@@ -18,6 +18,7 @@ fun auth(client: SSHClient, username: String, s: String)
     }
 }
 fun main(args: Array<String>) {
+    //log.info{"Hello world!".toInt()}
     log.info("Program arguments: ${args.joinToString()}")
     //https://www.javadoc.io/doc/com.hierynomus/sshj/0.11.0/net/schmizz/sshj/SSHClient.html
     val ssh = SSHClient()
