@@ -5,7 +5,7 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 
 import mu.KotlinLogging
-
+private val log = KotlinLogging.logger {}
 fun auth(client: SSHClient, username: String, s: String)
 {
     val f = File(s)
@@ -17,7 +17,6 @@ fun auth(client: SSHClient, username: String, s: String)
         client.authPassword(username, s)
     }
 }
-private val log = KotlinLogging.logger {}
 fun main(args: Array<String>) {
     log.info {"This is an info level log message!"}
     println("Program arguments: ${args.joinToString()}")
