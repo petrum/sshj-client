@@ -1,5 +1,9 @@
 #/bin/bash
 JAR=out/artifacts/sshj_client_main_jar/sshj-client.main.jar
 zip -d $JAR 'META-INF/*SF'
-java -Dkotlin-logging.throwOnMessageError -cp $JAR MainKt www.petrum.net 22223 petrum /mnt/c/Users/petru/.ssh/id_rsa 'uname -a'
+KEY=/mnt/c/Users/petru/.ssh/id_rsa
+if [[ ! -f $KEY ]]; then
+    KEY=/home/petrum/.ssh/id_rsa
+fi
+java -Dkotlin-logging.throwOnMessageError -cp $JAR MainKt www.petrum.net 22223 petrum $KEY 'uname -a'
 
