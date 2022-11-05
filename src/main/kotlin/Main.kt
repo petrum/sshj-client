@@ -49,8 +49,8 @@ fun main(args: Array<String>) {
         val session = ssh.startSession()
         try {
             val cmd = session.exec(args[4])
-            cmd.join(1, TimeUnit.SECONDS)
             log.info(cmd.toString())
+            cmd.join(1, TimeUnit.SECONDS)
             System.out.println(IOUtils.readFully(cmd.getInputStream()).toString())
         } finally {
             session.close()
