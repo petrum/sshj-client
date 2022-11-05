@@ -9,7 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3b4ded70-6d1b-434a-8c4e-1f97bf7a3d45" name="Changes" comment="fixed logging" />
+    <list default="true" id="3b4ded70-6d1b-434a-8c4e-1f97bf7a3d45" name="Changes" comment="misc" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -140,7 +140,28 @@
       <option name="project" value="LOCAL" />
       <updated>1667590027126</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="linux files">
+      <created>1667656587166</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1667656587166</updated>
+    </task>
+    <task id="LOCAL-00012" summary="misc">
+      <created>1667656801122</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1667656801122</updated>
+    </task>
+    <task id="LOCAL-00013" summary="misc">
+      <created>1667656937679</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1667656937679</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -163,7 +184,9 @@
     <MESSAGE value="typo" />
     <MESSAGE value="fixed windoze params" />
     <MESSAGE value="fixed logging" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed logging" />
+    <MESSAGE value="linux files" />
+    <MESSAGE value="misc" />
+    <option name="LAST_COMMIT_MESSAGE" value="misc" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
