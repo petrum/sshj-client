@@ -1,11 +1,25 @@
+
 import mu.KotlinLogging
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.common.IOUtils
 import net.schmizz.sshj.userauth.keyprovider.KeyProvider
+import java.io.DataOutputStream
 import java.io.File
-import java.security.*
+import java.io.FileOutputStream
+import java.security.KeyPair
+import java.security.KeyPairGenerator
+import java.security.NoSuchAlgorithmException
+import java.security.PublicKey
+import java.util.*
 import java.util.concurrent.TimeUnit
-
+fun PublicKey.toPemString(): String {
+    val publicKeyBase64: String = Base64.getEncoder().encodeToString(this.encoded)
+    return publicKeyBase64.chunked(64).joinToString(
+        separator = "\n",
+        prefix = "-----BEGIN PUBLIC KEY-----\n",
+        postfix = "\n-----END PUBLIC KEY-----\n"
+    )
+}
 private val log = KotlinLogging.logger {}
 fun auth(client: SSHClient, username: String, s: String)
 {
@@ -19,17 +33,21 @@ fun auth(client: SSHClient, username: String, s: String)
     }
 }
 
+fun persistKey(kp: KeyPair)
+{
+    val dos = DataOutputStream(FileOutputStream("rsaPublicKey.txt"))
+    dos.write(kp.public.toPemString().encodeToByteArray())
+    dos.flush()
+}
+
 fun genKeys()
 {
     try {
         val kpg = KeyPairGenerator.getInstance("RSA")
         kpg.initialize(2048)
         val kp = kpg.genKeyPair()
-        val priKey: PrivateKey = kp.getPrivate()
-        //val pubKey: PublicKey = kp.getPublic()
-        System.out.println("Keypair : " + kp.toString())
-        System.out.println("priKey : " + priKey.toString())
-        System.out.println("pubKey : " + kp.public.toString())
+        log.info("public key: " + kp.public.encoded)
+        persistKey(kp)
     }
     catch (e: NoSuchAlgorithmException) {
         System.out.println("Exception thrown : " + e)
