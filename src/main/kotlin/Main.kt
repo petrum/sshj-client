@@ -25,7 +25,7 @@ fun auth(client: SSHClient, username: String, s: String)
 {
     val f = File(s)
     if (f.exists()) {
-        val keys: KeyProvider = client.loadKeys(f.getPath())
+        val keys: KeyProvider = client.loadKeys(f.path)
         client.authPublickey(username, keys)
     }
     else {
@@ -69,7 +69,7 @@ fun main(args: Array<String>) {
             val cmd = session.exec(args[4])
             log.info(cmd.toString())
             cmd.join(1, TimeUnit.SECONDS)
-            System.out.println(IOUtils.readFully(cmd.getInputStream()).toString())
+            System.out.println(IOUtils.readFully(cmd.inputStream).toString())
         } finally {
             session.close()
         }
