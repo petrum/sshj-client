@@ -14,13 +14,15 @@ import java.util.concurrent.TimeUnit
 
 //https://blog.oddbit.com/post/2011-05-08-converting-openssh-public-keys
 //https://superuser.com/questions/1477472/openssh-public-key-file-format
-//https://stackoverflow.com/questions/3531506/using-public-key-from-authorized-keys-with-java-security/14582408#14582408
-//https://stackoverflow.com/questions/20897065/how-to-get-exponent-and-modulus-value-of-rsa-public-key-from-pfx-file-pem-file-i
 
 fun PublicKey.toRFC4253(): String {
+    // "You need to downcast to the transparent java.security.interfaces.RSAPublicKey type.
+    // Then you can access the modulus and public exponents."
+    // https://stackoverflow.com/questions/20897065/how-to-get-exponent-and-modulus-value-of-rsa-public-key-from-pfx-file-pem-file-i
     val rsaPublicKey = this as RSAPublicKey
     val byteOs = ByteArrayOutputStream()
     val dos = DataOutputStream(byteOs)
+    // https://stackoverflow.com/questions/3531506/using-public-key-from-authorized-keys-with-java-security/14582408#14582408
     dos.writeInt("ssh-rsa".toByteArray().size)
     dos.write("ssh-rsa".toByteArray())
     dos.writeInt(rsaPublicKey.publicExponent.toByteArray().size)
