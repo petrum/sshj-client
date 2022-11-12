@@ -11,7 +11,6 @@
   <component name="ChangeListManager">
     <list default="true" id="3b4ded70-6d1b-434a-8c4e-1f97bf7a3d45" name="Changes" comment="done it!">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,7 +84,7 @@
     <configuration name="MainKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="MainKt" />
       <module name="sshj-client.main" />
-      <option name="PROGRAM_PARAMETERS" value="www.petrum.net 22223 petrum id_rsa &quot;uname -a&quot;" />
+      <option name="PROGRAM_PARAMETERS" value="www.petrum.net 22223 petrum C:\Users\petru\.ssh\id_rsa &quot;uname -a&quot;" />
       <shortenClasspath name="NONE" />
       <method v="2">
         <option name="Make" enabled="true" />
