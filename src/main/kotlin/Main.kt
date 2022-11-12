@@ -3,28 +3,42 @@ import mu.KotlinLogging
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.common.IOUtils
 import net.schmizz.sshj.userauth.keyprovider.KeyProvider
+import java.io.ByteArrayOutputStream
 import java.io.DataOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.security.*
+import java.security.interfaces.RSAPublicKey
 import java.util.*
 import java.util.concurrent.TimeUnit
-fun PublicKey.toPemString(): String {
-    val publicKeyBase64: String = Base64.getEncoder().encodeToString(this.encoded)
-    return publicKeyBase64.chunked(64).joinToString(
-        separator = "\n",
-        prefix = "-----BEGIN PUBLIC KEY-----\n",
-        postfix = "\n-----END PUBLIC KEY-----\n"
-    )
+
+//https://blog.oddbit.com/post/2011-05-08-converting-openssh-public-keys
+//https://superuser.com/questions/1477472/openssh-public-key-file-format
+//https://stackoverflow.com/questions/3531506/using-public-key-from-authorized-keys-with-java-security/14582408#14582408
+//https://stackoverflow.com/questions/20897065/how-to-get-exponent-and-modulus-value-of-rsa-public-key-from-pfx-file-pem-file-i
+
+fun PublicKey.toRFC4253(): String {
+    val rsaPublicKey = this as RSAPublicKey
+    val byteOs = ByteArrayOutputStream()
+    val dos = DataOutputStream(byteOs)
+    dos.writeInt("ssh-rsa".toByteArray().size)
+    dos.write("ssh-rsa".toByteArray())
+    dos.writeInt(rsaPublicKey.publicExponent.toByteArray().size)
+    dos.write(rsaPublicKey.publicExponent.toByteArray())
+    dos.writeInt(rsaPublicKey.modulus.toByteArray().size)
+    dos.write(rsaPublicKey.modulus.toByteArray())
+    val publicKeyEncoded = Base64.getEncoder().encodeToString(byteOs.toByteArray())
+    return "ssh-rsa $publicKeyEncoded sshj-client"
 }
 fun PrivateKey.toPemString(): String {
     val privateKeyBase64: String = Base64.getEncoder().encodeToString(this.encoded)
-    return privateKeyBase64.chunked(64).joinToString(
+    return privateKeyBase64.chunked(70).joinToString(
         separator = "\n",
         prefix = "-----BEGIN RSA PRIVATE KEY-----\n",
         postfix = "\n-----END RSA PRIVATE KEY-----\n"
     )
 }
+
 private val log = KotlinLogging.logger {}
 fun auth(client: SSHClient, username: String, s: String)
 {
@@ -41,7 +55,7 @@ fun auth(client: SSHClient, username: String, s: String)
 fun persistKeys(kp: KeyPair)
 {
     val dos = DataOutputStream(FileOutputStream("rsaPublicKey.txt"))
-    dos.write(kp.public.toPemString().encodeToByteArray())
+    dos.write(kp.public.toRFC4253().encodeToByteArray())
     dos.flush()
 
     val dos2 = DataOutputStream(FileOutputStream("rsaPrivateKey.txt"))
@@ -55,7 +69,6 @@ fun genKeys()
         val kpg = KeyPairGenerator.getInstance("RSA")
         kpg.initialize(2048)
         val kp = kpg.genKeyPair()
-        log.info("public key: " + kp.public.encoded)
         persistKeys(kp)
     }
     catch (e: NoSuchAlgorithmException) {
@@ -64,6 +77,7 @@ fun genKeys()
 }
 
 fun main(args: Array<String>) {
+
     //log.info{"Hello world!".toInt()}
     log.info("Program arguments: ${args.joinToString()}")
     //https://www.javadoc.io/doc/com.hierynomus/sshj/0.11.0/net/schmizz/sshj/SSHClient.html
