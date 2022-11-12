@@ -33,6 +33,7 @@ fun PublicKey.toRFC4253(): String {
     val publicKeyEncoded = Base64.getEncoder().encodeToString(byteOs.toByteArray())
     return "ssh-rsa $publicKeyEncoded sshj-client2\n"
 }
+
 fun PrivateKey.toPemString(): String {
     val privateKeyBase64: String = Base64.getEncoder().encodeToString(this.encoded)
     return privateKeyBase64.chunked(70).joinToString(
