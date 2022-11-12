@@ -85,7 +85,7 @@
     <configuration name="MainKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="MainKt" />
       <module name="sshj-client.main" />
-      <option name="PROGRAM_PARAMETERS" value="www.petrum.net 22223 petrum C:\Users\petru\.ssh\id_rsa &quot;uname -a&quot;" />
+      <option name="PROGRAM_PARAMETERS" value="www.petrum.net 22223 petrum id_rsa &quot;uname -a&quot;" />
       <shortenClasspath name="NONE" />
       <method v="2">
         <option name="Make" enabled="true" />

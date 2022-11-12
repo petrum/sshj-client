@@ -11,6 +11,7 @@ import java.security.*
 import java.security.interfaces.RSAPublicKey
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.system.exitProcess
 
 //https://blog.oddbit.com/post/2011-05-08-converting-openssh-public-keys
 //https://superuser.com/questions/1477472/openssh-public-key-file-format
@@ -79,11 +80,19 @@ fun genKeys()
 }
 
 fun main(args: Array<String>) {
-
     //log.info{"Hello world!".toInt()}
     log.info("Program arguments: ${args.joinToString()}")
     //https://www.javadoc.io/doc/com.hierynomus/sshj/0.11.0/net/schmizz/sshj/SSHClient.html
-    genKeys()
+    if (args.size < 5) {
+        System.err.println("args are: www.petrum.net 22223 petrum id_rsa 'uname -a'")
+        exitProcess(-1)
+    }
+    val f = File(args[3])
+    if (!f.exists()) {
+        genKeys()
+        System.err.println("generated the keys")
+        exitProcess(0)
+    }
     val ssh = SSHClient()
     ssh.loadKnownHosts()
     ssh.connect(args[0], args[1].toInt())
