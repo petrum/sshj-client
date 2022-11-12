@@ -54,11 +54,11 @@ fun auth(client: SSHClient, username: String, s: String)
 
 fun persistKeys(kp: KeyPair)
 {
-    val dos = DataOutputStream(FileOutputStream("rsaPublicKey.txt"))
+    val dos = DataOutputStream(FileOutputStream("id_rsa.pub"))
     dos.write(kp.public.toRFC4253().encodeToByteArray())
     dos.flush()
 
-    val dos2 = DataOutputStream(FileOutputStream("rsaPrivateKey.txt"))
+    val dos2 = DataOutputStream(FileOutputStream("id_rsa"))
     dos2.write(kp.private.toPemString().encodeToByteArray())
     dos2.flush()
 }
