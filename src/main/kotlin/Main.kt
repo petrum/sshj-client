@@ -147,6 +147,26 @@ fun genKeys(f: String)
     log.info("generated the keys")
 }
 
+fun executeRemote(host: String, port: Int, username: String, priKeyFile: String, cmdStr: String): String {
+    val ssh = SSHClient()
+    ssh.loadKnownHosts()
+    //ssh.addHostKeyVerifier(PromiscuousVerifier())
+    ssh.connect(host, port)
+    try {
+        auth(ssh, username, priKeyFile)
+        val session = ssh.startSession()
+        try {
+            val cmd = session.exec(cmdStr)
+            log.info(cmd.toString())
+            cmd.join(1, TimeUnit.SECONDS)
+            return IOUtils.readFully(cmd.inputStream).toString()
+        } finally {
+            session.close()
+        }
+    } finally {
+        ssh.disconnect()
+    }
+}
 fun main(args: Array<String>) {
     try {
         log.info("Program arguments: ${args.joinToString()}")
@@ -155,30 +175,13 @@ fun main(args: Array<String>) {
             log.error("args are: www.petrum.net 22223 petrum id_rsa 'uname -a'")
             exitProcess(-1)
         }
-        val priKFile = args[3]
-        val f = File(priKFile)
+        val priKeyFile = args[3]
+        val f = File(priKeyFile)
         if (!f.exists()) {
-            genKeys(priKFile)
+            genKeys(priKeyFile)
             exitProcess(0)
         }
-        val ssh = SSHClient()
-        ssh.loadKnownHosts()
-        //ssh.addHostKeyVerifier(PromiscuousVerifier())
-        ssh.connect(args[0], args[1].toInt())
-        try {
-            auth(ssh, args[2], priKFile)
-            val session = ssh.startSession()
-            try {
-                val cmd = session.exec(args[4])
-                log.info(cmd.toString())
-                cmd.join(1, TimeUnit.SECONDS)
-                System.out.println(IOUtils.readFully(cmd.inputStream).toString())
-            } finally {
-                session.close()
-            }
-        } finally {
-            ssh.disconnect()
-        }
+        System.out.println(executeRemote(args[0], args[1].toInt(), args[2], priKeyFile, args[4]))
     }
     catch (e: Exception) {
         log.error(e.toString())
