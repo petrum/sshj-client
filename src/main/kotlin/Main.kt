@@ -60,8 +60,8 @@ fun loadPriKey(f: String): PrivateKey {
     log.info("loading private key from '$f'")
     log.debug("loading private key from '$f':\n$key")
     val privateKeyPEM = key.replace(System.lineSeparator().toRegex(), "")
-        .replace("-----BEGIN RSA PRIVATE KEY-----".toRegex(), "")
-        .replace("-----END RSA PRIVATE KEY-----".toRegex(), "")
+        .replace("-----END .* PRIVATE KEY-----".toRegex(), "")
+        .replace("-----BEGIN .* PRIVATE KEY-----".toRegex(), "")
     log.debug("private key PEM: '${privateKeyPEM}'")
 
     val encoded: ByteArray = Base64.getDecoder().decode(privateKeyPEM)
