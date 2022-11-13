@@ -68,7 +68,9 @@ fun loadPriKey(f: String): PrivateKey {
 
     val keyFactory = KeyFactory.getInstance("RSA")
     val keySpec = PKCS8EncodedKeySpec(encoded)
-    return keyFactory.generatePrivate(keySpec)
+    val res = keyFactory.generatePrivate(keySpec)
+    log.info("done loading private key from '$f'")
+    return res
 }
 
 fun loadPubKey(f: String): PublicKey {
@@ -93,7 +95,9 @@ fun loadPubKey(f: String): PublicKey {
     val keyFactory = KeyFactory.getInstance("RSA")
     //val keySpec = X509EncodedKeySpec(Base64.getDecoder().decode(publicKeyPEM))
     val keySpec = RSAPublicKeySpec(modulus, exp)
-    return keyFactory.generatePublic(keySpec)
+    val res = keyFactory.generatePublic(keySpec)
+    log.info("done loading public key from '$f'")
+    return res
 }
 
 fun savePubKey(k: PublicKey, f: String) {
@@ -178,6 +182,7 @@ fun main(args: Array<String>) {
         val priKeyFile = args[3]
         val f = File(priKeyFile)
         if (!f.exists()) {
+            log.info("The file '${f}' doesn't exists, generating new keys...")
             genKeys(priKeyFile)
             exitProcess(0)
         }
