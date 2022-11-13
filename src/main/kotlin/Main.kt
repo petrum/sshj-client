@@ -94,6 +94,9 @@ fun loadPubKey(f: String): PublicKey {
     val modulusSize = ds.readInt()
     val modulus = BigInteger(ds.readNBytes(modulusSize))
     log.info("size1 = $size1, expSize = $expSize, exp = $exp, modulusSize = $modulusSize, left = ${ds.available()}")
+    if (ds.available() != 0) {
+        log.error("still ${ds.available()} bytes left in the public key!")
+    }
     val keyFactory = KeyFactory.getInstance("RSA")
     //val keySpec = X509EncodedKeySpec(Base64.getDecoder().decode(publicKeyPEM))
     val keySpec = RSAPublicKeySpec(modulus, exp)
