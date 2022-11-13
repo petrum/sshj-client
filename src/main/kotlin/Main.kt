@@ -2,7 +2,8 @@
 import mu.KotlinLogging
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.common.IOUtils
-import net.schmizz.sshj.userauth.keyprovider.KeyProvider
+import net.schmizz.sshj.transport.verification.PromiscuousVerifier
+import net.schmizz.sshj.userauth.keyprovider.PKCS8KeyFile
 import org.bouncycastle.util.io.pem.PemObject
 import org.bouncycastle.util.io.pem.PemWriter
 import java.io.*
@@ -14,6 +15,7 @@ import java.security.interfaces.RSAPublicKey
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
+
 
 private val log = KotlinLogging.logger {}
 
@@ -56,10 +58,12 @@ fun PrivateKey.toPemString2(): String {
     return byteStream.toString()
 }
 
-fun auth(client: SSHClient, username: String, f: String)
+fun auth(client: SSHClient, username: String, s: String)
 {
-    val keys: KeyProvider = client.loadKeys(f)
-    client.authPublickey(username, keys)
+    //val key: KeyProvider = client.loadKeys(s)
+    val key = PKCS8KeyFile()
+    key.init((File(s)))
+    client.authPublickey(username, key)
 }
 
 fun persistKeys(kp: KeyPair, priKeyFile: String)
@@ -103,7 +107,8 @@ fun main(args: Array<String>) {
             exitProcess(0)
         }
         val ssh = SSHClient()
-        ssh.loadKnownHosts()
+        //ssh.loadKnownHosts()
+        ssh.addHostKeyVerifier(PromiscuousVerifier())
         ssh.connect(args[0], args[1].toInt())
         try {
             auth(ssh, args[2], priKFile)

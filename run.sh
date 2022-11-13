@@ -1,4 +1,8 @@
 #/bin/bash
+
+SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd $SRC
+
 JAR=out/artifacts/sshj_client_main_jar/sshj-client.main.jar
 zip -d $JAR 'META-INF/*SF'
 #KEY=/mnt/c/Users/petru/.ssh/id_rsa
