@@ -91,7 +91,7 @@ fun loadPubKey(f: String): PublicKey {
     val exp = BigInteger(ds.readNBytes(expSize))
     val modulusSize = ds.readInt()
     val modulus = BigInteger(ds.readNBytes(modulusSize))
-    log.info("size1 = $size1, expSize = $expSize, modulusSize = $modulusSize, left = ${ds.available()}")
+    log.info("size1 = $size1, expSize = $expSize, exp = $exp, modulusSize = $modulusSize, left = ${ds.available()}")
     val keyFactory = KeyFactory.getInstance("RSA")
     //val keySpec = X509EncodedKeySpec(Base64.getDecoder().decode(publicKeyPEM))
     val keySpec = RSAPublicKeySpec(modulus, exp)
@@ -132,8 +132,8 @@ fun auth(client: SSHClient, username: String, f: String)
     val kp = KeyPair(loadPubKey(pri2pub(f)), loadPriKey(f))
     client.authPublickey(username, KeyPairWrapper(kp))
 }
-fun pri2pub(f: String): String {
-    val f = File(f)
+fun pri2pub(s: String): String {
+    val f = File(s)
     return "${f.parentFile.absolutePath}/id_rsa.pub"
 }
 
