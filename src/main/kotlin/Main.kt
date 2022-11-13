@@ -3,15 +3,13 @@ import mu.KotlinLogging
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.common.IOUtils
 import net.schmizz.sshj.transport.verification.PromiscuousVerifier
-import net.schmizz.sshj.userauth.keyprovider.PKCS8KeyFile
-import org.bouncycastle.util.io.pem.PemObject
-import org.bouncycastle.util.io.pem.PemWriter
+import net.schmizz.sshj.userauth.keyprovider.KeyPairWrapper
 import java.io.*
-import java.security.KeyPair
-import java.security.KeyPairGenerator
-import java.security.PrivateKey
-import java.security.PublicKey
+import java.math.BigInteger
+import java.security.*
 import java.security.interfaces.RSAPublicKey
+import java.security.spec.PKCS8EncodedKeySpec
+import java.security.spec.RSAPublicKeySpec
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
@@ -37,58 +35,117 @@ fun PublicKey.toRFC4253(): String {
     dos.writeInt(rsaPublicKey.modulus.toByteArray().size)
     dos.write(rsaPublicKey.modulus.toByteArray())
     val publicKeyEncoded = Base64.getEncoder().encodeToString(byteOs.toByteArray())
-    return "ssh-rsa $publicKeyEncoded sshj-client2\n"
+    return "ssh-rsa $publicKeyEncoded sshj-client2"
 }
-/*
+
 fun PrivateKey.toPemString(): String {
     val privateKeyBase64: String = Base64.getEncoder().encodeToString(this.encoded)
     return privateKeyBase64.chunked(70).joinToString(
         separator = "\n",
-        prefix = "-----BEGIN OPENSSH PRIVATE KEY-----\n",
-        postfix = "\n-----END OPENSSH PRIVATE KEY-----\n"
+        prefix = "-----BEGIN RSA PRIVATE KEY-----\n",
+        postfix = "\n-----END RSA PRIVATE KEY-----\n"
     )
 }
-*/
+/*
 fun PrivateKey.toPemString2(): String {
-    val pemObject = PemObject("RSA PRIVATE KEY", this.encoded)
+    //val pemObject = PemObject("OPENSSH PRIVATE KEY", this.encoded) // this fails with ssh
+    val pemObject = PemObject("RSA PRIVATE KEY", PKCS8EncodedKeySpec(this.encoded).encoded)
     val byteStream = ByteArrayOutputStream()
     val pemWriter = PemWriter(OutputStreamWriter(byteStream))
     pemWriter.writeObject(pemObject)
     pemWriter.close()
     return byteStream.toString()
 }
+*/
+fun loadPriKey(f: String): PrivateKey {
+    val key = File(f).readText(Charsets.UTF_8)
+    log.info("loading private key from '$f'")
+    log.debug("loading private key from '$f':\n$key")
+    val privateKeyPEM = key.replace(System.lineSeparator().toRegex(), "")
+        .replace("-----BEGIN RSA PRIVATE KEY-----".toRegex(), "")
+        .replace("-----END RSA PRIVATE KEY-----".toRegex(), "")
+    log.debug("private key PEM: '${privateKeyPEM}'")
 
-fun auth(client: SSHClient, username: String, s: String)
-{
-    //val key: KeyProvider = client.loadKeys(s)
-    val key = PKCS8KeyFile()
-    key.init((File(s)))
-    client.authPublickey(username, key)
+    val encoded: ByteArray = Base64.getDecoder().decode(privateKeyPEM)
+
+    val keyFactory = KeyFactory.getInstance("RSA")
+    val keySpec = PKCS8EncodedKeySpec(encoded)
+    return keyFactory.generatePrivate(keySpec)
 }
 
-fun persistKeys(kp: KeyPair, priKeyFile: String)
-{
-    val f = File(priKeyFile)
-    val dir = f.parentFile.absolutePath
+fun loadPubKey(f: String): PublicKey {
+    val key = File(f).readText(Charsets.UTF_8)
+    log.info("loading public key from '$f'")
+    log.debug("loading public key from '$f': $key")
+    val publicKeyPEM = key.replace("ssh-rsa ", "")
+        .replace(System.lineSeparator().toRegex(), "")
+        .replace(" sshj-client2", "")
+        .replace(" petrum@gram", "")
 
-    val dos = DataOutputStream(FileOutputStream("$dir/id_rsa.pub"))
-    dos.write(kp.public.toRFC4253().encodeToByteArray())
+    log.debug("public key PEM: '${publicKeyPEM}'")
+    val ds = DataInputStream(ByteArrayInputStream(Base64.getDecoder().decode(publicKeyPEM)))
+    val size1 = ds.readInt()
+
+    ds.readNBytes(size1)
+    val expSize = ds.readInt()
+    val exp = BigInteger(ds.readNBytes(expSize))
+    val modulusSize = ds.readInt()
+    val modulus = BigInteger(ds.readNBytes(modulusSize))
+    log.info("size1 = $size1, expSize = $expSize, modulusSize = $modulusSize, left = ${ds.available()}")
+    val keyFactory = KeyFactory.getInstance("RSA")
+    //val keySpec = X509EncodedKeySpec(Base64.getDecoder().decode(publicKeyPEM))
+    val keySpec = RSAPublicKeySpec(modulus, exp)
+    return keyFactory.generatePublic(keySpec)
+}
+
+fun savePubKey(k: PublicKey, f: String) {
+    log.info("saving public key to '$f'")
+    val dos = DataOutputStream(FileOutputStream(f))
+    dos.write(k.toRFC4253().encodeToByteArray())
     dos.flush()
-
-    val dos2 = DataOutputStream(FileOutputStream(f))
-    dos2.write(kp.private.toPemString2().encodeToByteArray())
-    dos2.flush()
-
-    //PKCS8EncodedKeySpec()
-    //X509EncodedKeySpec()
+    //http://www.java2s.com/example/java-api/java/security/spec/pkcs8encodedkeyspec/pkcs8encodedkeyspec-1-0.html
+    //val k2 = loadPubKey("/home/petrum/.ssh/bak/id_rsa.pub")
+    val k2 = loadPubKey(f)
+    if (!k.equals(k2)) {
+        log.error("The public keys differ: $k vs $k2")
+    }
+}
+fun savePriKey(k: PrivateKey, f: String) {
+    log.info("saving private key to '$f'")
+    val dos = DataOutputStream(FileOutputStream(f))
+    dos.write(k.toPemString().encodeToByteArray())
+    dos.flush()
+    //val k2 = loadPriKey("/home/petrum/.ssh/bak/id_rsa")
+    val k2 = loadPriKey(f)
+    if (!k.equals(k2)) {
+        log.error("The private keys differ: $k vs $k2")
+    }
 }
 
-fun genKeys(priKeyFile: String)
+fun auth(client: SSHClient, username: String, f: String)
+{
+    //val key: KeyProvider = client.loadKeys(f)
+
+    //val key = PKCS8KeyFile()
+    //key.init((File(s)))
+
+    val kp = KeyPair(loadPubKey(pri2pub(f)), loadPriKey(f))
+    client.authPublickey(username, KeyPairWrapper(kp))
+}
+fun pri2pub(f: String): String {
+    val f = File(f)
+    return "${f.parentFile.absolutePath}/id_rsa.pub"
+}
+
+fun genKeys(f: String)
 {
     val kpg = KeyPairGenerator.getInstance("RSA")
     kpg.initialize(2048)
     val kp = kpg.genKeyPair()
-    persistKeys(kp, priKeyFile)
+
+    savePubKey(kp.public, pri2pub(f))
+    savePriKey(kp.private, f)
+
     log.info("generated the keys")
 }
 
