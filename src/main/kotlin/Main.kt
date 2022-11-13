@@ -64,9 +64,7 @@ fun loadPriKey(f: String): PrivateKey {
         .replace("-----END .* PRIVATE KEY-----".toRegex(), "")
         .replace("-----BEGIN .* PRIVATE KEY-----".toRegex(), "")
     log.debug("private key PEM: '${privateKeyPEM}'")
-
     val encoded: ByteArray = Base64.getDecoder().decode(privateKeyPEM)
-
     val keyFactory = KeyFactory.getInstance("RSA")
     val keySpec = PKCS8EncodedKeySpec(encoded)
     val res = keyFactory.generatePrivate(keySpec)
@@ -111,7 +109,7 @@ fun savePubKey(k: PublicKey, f: String) {
     //http://www.java2s.com/example/java-api/java/security/spec/pkcs8encodedkeyspec/pkcs8encodedkeyspec-1-0.html
     val k2 = loadPubKey(f)
     if (!k.equals(k2)) {
-        log.error("The public keys differ: $k vs $k2")
+        throw Exception("The public keys differ: $k vs $k2")
     }
 }
 fun savePriKey(k: PrivateKey, f: String) {
@@ -121,7 +119,7 @@ fun savePriKey(k: PrivateKey, f: String) {
     dos.flush()
     val k2 = loadPriKey(f)
     if (!k.equals(k2)) {
-        log.error("The private keys differ: $k vs $k2")
+        throw Exception("The private keys differ: $k vs $k2")
     }
 }
 
@@ -193,4 +191,5 @@ fun main(args: Array<String>) {
     catch (e: Exception) {
         log.error(e.toString())
     }
+    exitProcess(-2
 }
