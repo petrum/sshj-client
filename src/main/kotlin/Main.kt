@@ -151,7 +151,7 @@ fun genKeys(f: String)
     savePriKey(kp.private, f)
 }
 
-fun executeRemote(host: String, port: Int, username: String, priKeyFile: String, cmdStr: String): String {
+fun executeRemote(host: String, port: Int, username: String, priKeyFile: String, cmdStr: String): Triple<Int, String, String> {
     val ssh = SSHClient()
     ssh.loadKnownHosts()
     //ssh.addHostKeyVerifier(PromiscuousVerifier())
@@ -163,7 +163,10 @@ fun executeRemote(host: String, port: Int, username: String, priKeyFile: String,
             val cmd = session.exec(cmdStr)
             log.info(cmd.toString())
             cmd.join(1, TimeUnit.SECONDS)
-            return IOUtils.readFully(cmd.inputStream).toString()
+            val out = IOUtils.readFully(cmd.inputStream).toString()
+            val err = IOUtils.readFully(cmd.errorStream).toString()
+            val code = cmd.exitStatus
+            return Triple(code, out, err)
         } finally {
             session.close()
         }
@@ -187,7 +190,12 @@ fun main(args: Array<String>) {
             log.info("generated the keys, exiting...")
             exitProcess(0)
         }
-        System.out.print(executeRemote(args[0], args[1].toInt(), args[2], priKeyFile, args[4]))
+        val res = executeRemote(args[0], args[1].toInt(), args[2], priKeyFile, args[4])
+        if (res.first == 0 && res.third.isNotEmpty()) {
+            print(res.second.toString())
+        } else {
+            print(res.toString())
+        }
         exitProcess(0)
     }
     catch (e: Exception) {
