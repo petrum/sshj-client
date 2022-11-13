@@ -1,4 +1,3 @@
-
 import mu.KotlinLogging
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.common.IOUtils
@@ -45,6 +44,7 @@ fun PrivateKey.toPemString(): String {
         postfix = "\n-----END RSA PRIVATE KEY-----\n"
     )
 }
+
 /*
 fun PrivateKey.toPemString2(): String {
     //val pemObject = PemObject("OPENSSH PRIVATE KEY", this.encoded) // this fails with ssh
@@ -56,6 +56,7 @@ fun PrivateKey.toPemString2(): String {
     return byteStream.toString()
 }
 */
+
 fun loadPriKey(f: String): PrivateKey {
     val key = File(f).readText(Charsets.UTF_8)
     log.info("loading private key from '$f'")
@@ -84,7 +85,6 @@ fun loadPubKey(f: String): PublicKey {
     log.debug("public key PEM: '${publicKeyPEM}'")
     val ds = DataInputStream(ByteArrayInputStream(Base64.getDecoder().decode(publicKeyPEM)))
     val size1 = ds.readInt()
-
     ds.readNBytes(size1)
     val expSize = ds.readInt()
     val exp = BigInteger(ds.readNBytes(expSize))
@@ -112,6 +112,7 @@ fun savePubKey(k: PublicKey, f: String) {
         throw Exception("The public keys differ: $k vs $k2")
     }
 }
+
 fun savePriKey(k: PrivateKey, f: String) {
     log.info("saving private key to '$f'")
     val dos = DataOutputStream(FileOutputStream(f))
@@ -135,6 +136,7 @@ fun auth(client: SSHClient, username: String, f: String)
         client.authPublickey(username, KeyPairWrapper(kp))
     }
 }
+
 fun pri2pub(s: String): String {
     val f = File(s)
     return "${f.parentFile.absolutePath}/id_rsa.pub"
@@ -145,7 +147,6 @@ fun genKeys(f: String)
     val kpg = KeyPairGenerator.getInstance("RSA")
     kpg.initialize(2048)
     val kp = kpg.genKeyPair()
-
     savePubKey(kp.public, pri2pub(f))
     savePriKey(kp.private, f)
 }
