@@ -39,7 +39,7 @@ fun PublicKey.toRFC4253(): String {
 
 fun PrivateKey.toPemString(): String {
     val privateKeyBase64: String = Base64.getEncoder().encodeToString(this.encoded)
-    return privateKeyBase64.chunked(70).joinToString(
+    return privateKeyBase64.chunked(80).joinToString(
         separator = "\n",
         prefix = "-----BEGIN RSA PRIVATE KEY-----\n",
         postfix = "\n-----END RSA PRIVATE KEY-----\n"
@@ -95,7 +95,7 @@ fun loadPubKey(f: String): PublicKey {
     val modulus = BigInteger(ds.readNBytes(modulusSize))
     log.info("size1 = $size1, expSize = $expSize, exp = $exp, modulusSize = $modulusSize, left = ${ds.available()}")
     if (ds.available() != 0) {
-        log.error("still ${ds.available()} bytes left in the public key!")
+        throw Exception("still ${ds.available()} bytes left in the public key!")
     }
     val keyFactory = KeyFactory.getInstance("RSA")
     val keySpec = RSAPublicKeySpec(modulus, exp)
