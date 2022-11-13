@@ -1,6 +1,6 @@
 # sshj-client
 
-### First Kolin project
+### First Kotlin project
 1. create a Kotlin project in IntelliJ IDEA, with the wizard, using gradle
 2. added the sshj client code in Main.kt
 3. in build.gradle.kts file press Alt + Ins, then type "sshj" in search, add this dependency, as well as "slf4j-simple" (used by sshj):
