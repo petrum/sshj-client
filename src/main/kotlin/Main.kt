@@ -111,7 +111,6 @@ fun savePubKey(k: PublicKey, f: String) {
     dos.write(k.toRFC4253().encodeToByteArray())
     dos.flush()
     //http://www.java2s.com/example/java-api/java/security/spec/pkcs8encodedkeyspec/pkcs8encodedkeyspec-1-0.html
-    //val k2 = loadPubKey("/home/petrum/.ssh/bak/id_rsa.pub")
     val k2 = loadPubKey(f)
     if (!k.equals(k2)) {
         log.error("The public keys differ: $k vs $k2")
@@ -122,7 +121,6 @@ fun savePriKey(k: PrivateKey, f: String) {
     val dos = DataOutputStream(FileOutputStream(f))
     dos.write(k.toPemString().encodeToByteArray())
     dos.flush()
-    //val k2 = loadPriKey("/home/petrum/.ssh/bak/id_rsa")
     val k2 = loadPriKey(f)
     if (!k.equals(k2)) {
         log.error("The private keys differ: $k vs $k2")
