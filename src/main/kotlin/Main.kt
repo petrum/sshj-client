@@ -3,15 +3,19 @@ import mu.KotlinLogging
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.common.IOUtils
 import net.schmizz.sshj.userauth.keyprovider.KeyProvider
-import java.io.ByteArrayOutputStream
-import java.io.DataOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.security.*
+import org.bouncycastle.util.io.pem.PemObject
+import org.bouncycastle.util.io.pem.PemWriter
+import java.io.*
+import java.security.KeyPair
+import java.security.KeyPairGenerator
+import java.security.PrivateKey
+import java.security.PublicKey
 import java.security.interfaces.RSAPublicKey
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
+
+private val log = KotlinLogging.logger {}
 
 //https://blog.oddbit.com/post/2011-05-08-converting-openssh-public-keys
 //https://superuser.com/questions/1477472/openssh-public-key-file-format
@@ -33,82 +37,90 @@ fun PublicKey.toRFC4253(): String {
     val publicKeyEncoded = Base64.getEncoder().encodeToString(byteOs.toByteArray())
     return "ssh-rsa $publicKeyEncoded sshj-client2\n"
 }
-
+/*
 fun PrivateKey.toPemString(): String {
     val privateKeyBase64: String = Base64.getEncoder().encodeToString(this.encoded)
     return privateKeyBase64.chunked(70).joinToString(
         separator = "\n",
-        prefix = "-----BEGIN RSA PRIVATE KEY-----\n",
-        postfix = "\n-----END RSA PRIVATE KEY-----\n"
+        prefix = "-----BEGIN OPENSSH PRIVATE KEY-----\n",
+        postfix = "\n-----END OPENSSH PRIVATE KEY-----\n"
     )
 }
-
-private val log = KotlinLogging.logger {}
-fun auth(client: SSHClient, username: String, s: String)
-{
-    val f = File(s)
-    if (f.exists()) {
-        val keys: KeyProvider = client.loadKeys(f.path)
-        client.authPublickey(username, keys)
-    }
-    else {
-        client.authPassword(username, s)
-    }
+*/
+fun PrivateKey.toPemString2(): String {
+    val pemObject = PemObject("RSA PRIVATE KEY", this.encoded)
+    val byteStream = ByteArrayOutputStream()
+    val pemWriter = PemWriter(OutputStreamWriter(byteStream))
+    pemWriter.writeObject(pemObject)
+    pemWriter.close()
+    return byteStream.toString()
 }
 
-fun persistKeys(kp: KeyPair)
+fun auth(client: SSHClient, username: String, f: String)
 {
-    val dos = DataOutputStream(FileOutputStream("id_rsa.pub"))
+    val keys: KeyProvider = client.loadKeys(f)
+    client.authPublickey(username, keys)
+}
+
+fun persistKeys(kp: KeyPair, priKeyFile: String)
+{
+    val f = File(priKeyFile)
+    val dir = f.parentFile.absolutePath
+
+    val dos = DataOutputStream(FileOutputStream("$dir/id_rsa.pub"))
     dos.write(kp.public.toRFC4253().encodeToByteArray())
     dos.flush()
 
-    val dos2 = DataOutputStream(FileOutputStream("id_rsa"))
-    dos2.write(kp.private.toPemString().encodeToByteArray())
+    val dos2 = DataOutputStream(FileOutputStream(f))
+    dos2.write(kp.private.toPemString2().encodeToByteArray())
     dos2.flush()
+
+    //PKCS8EncodedKeySpec()
+    //X509EncodedKeySpec()
 }
 
-fun genKeys()
+fun genKeys(priKeyFile: String)
 {
-    try {
-        val kpg = KeyPairGenerator.getInstance("RSA")
-        kpg.initialize(2048)
-        val kp = kpg.genKeyPair()
-        persistKeys(kp)
-    }
-    catch (e: NoSuchAlgorithmException) {
-        System.out.println("Exception thrown : " + e)
-    }
+    val kpg = KeyPairGenerator.getInstance("RSA")
+    kpg.initialize(2048)
+    val kp = kpg.genKeyPair()
+    persistKeys(kp, priKeyFile)
+    log.info("generated the keys")
 }
 
 fun main(args: Array<String>) {
-    //log.info{"Hello world!".toInt()}
-    log.info("Program arguments: ${args.joinToString()}")
-    //https://www.javadoc.io/doc/com.hierynomus/sshj/0.11.0/net/schmizz/sshj/SSHClient.html
-    if (args.size < 5) {
-        System.err.println("args are: www.petrum.net 22223 petrum id_rsa 'uname -a'")
-        exitProcess(-1)
-    }
-    val f = File(args[3])
-    if (!f.exists()) {
-        genKeys()
-        System.err.println("generated the keys")
-        exitProcess(0)
-    }
-    val ssh = SSHClient()
-    ssh.loadKnownHosts()
-    ssh.connect(args[0], args[1].toInt())
     try {
-        auth(ssh, args[2], args[3])
-        val session = ssh.startSession()
-        try {
-            val cmd = session.exec(args[4])
-            log.info(cmd.toString())
-            cmd.join(1, TimeUnit.SECONDS)
-            System.out.println(IOUtils.readFully(cmd.inputStream).toString())
-        } finally {
-            session.close()
+        log.info("Program arguments: ${args.joinToString()}")
+        //https://www.javadoc.io/doc/com.hierynomus/sshj/0.11.0/net/schmizz/sshj/SSHClient.html
+        if (args.size < 5) {
+            log.error("args are: www.petrum.net 22223 petrum id_rsa 'uname -a'")
+            exitProcess(-1)
         }
-    } finally {
-        ssh.disconnect()
+        val priKFile = args[3]
+        val f = File(priKFile)
+        if (!f.exists()) {
+            genKeys(priKFile)
+            exitProcess(0)
+        }
+        val ssh = SSHClient()
+        ssh.loadKnownHosts()
+        ssh.connect(args[0], args[1].toInt())
+        try {
+            auth(ssh, args[2], priKFile)
+            val session = ssh.startSession()
+            try {
+                val cmd = session.exec(args[4])
+                log.info(cmd.toString())
+                cmd.join(1, TimeUnit.SECONDS)
+                System.out.println(IOUtils.readFully(cmd.inputStream).toString())
+            } finally {
+                session.close()
+            }
+        } finally {
+            ssh.disconnect()
+        }
+    }
+    catch (e: Exception) {
+        log.error(e.toString())
     }
 }
