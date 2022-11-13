@@ -58,7 +58,10 @@ Linux nuc 5.15.0-52-generic #58-Ubuntu SMP Thu Oct 13 08:03:55 UTC 2022 x86_64 x
 
 
 ```
-petrum@gram ~/sshj-client[master]$ ./rerun.sh
+petrum@gram ~$ sshj-client/rerun.sh
+- backing up the keys
+'/home/petrum/.ssh/id_rsa' -> '/home/petrum/.ssh/bak/id_rsa'
+'/home/petrum/.ssh/id_rsa.pub' -> '/home/petrum/.ssh/bak/id_rsa.pub'
 - removing the keys...
 - regenerateing new keys as they are missing...
 - appending the new pub key to the remote server...
@@ -69,5 +72,7 @@ Linux
 - checking the keys from openssh backup files...
 Linux
 - restoreing the backup files for normal usage...
+'/home/petrum/.ssh/bak/id_rsa' -> '/home/petrum/.ssh/id_rsa'
+'/home/petrum/.ssh/bak/id_rsa.pub' -> '/home/petrum/.ssh/id_rsa.pub'
 Done
 ```
