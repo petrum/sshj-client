@@ -79,11 +79,11 @@ fun loadPubKey(f: String): PublicKey {
     val key = File(f).readText(Charsets.UTF_8)
     log.info("loading public key from '$f'")
     log.debug("loading public key from '$f': $key")
-    val publicKeyPEM = key.replace("ssh-rsa ", "")
-        .replace(System.lineSeparator().toRegex(), "")
-        .replace(" sshj-client2", "")
-        .replace(" petrum@gram", "")
-
+    val words = key.split(" ")
+    if (words.size < 3) {
+        throw Exception("Got too few words (size = ${words.size})")
+    }
+    val publicKeyPEM = words[1]
     log.debug("public key PEM: '${publicKeyPEM}'")
     val ds = DataInputStream(ByteArrayInputStream(Base64.getDecoder().decode(publicKeyPEM)))
     val size1 = ds.readInt()
