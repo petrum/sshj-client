@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -e
 function display()
 {
     echo " - $@"
@@ -24,7 +24,9 @@ display appending the new pub key to the remote server...
 display checking if new sshj created keys work with ssh...
 ssh www.petrum.net -p 22223 uname
 display checking the new keys from new created files...
+echo $?
 ./run.sh ~/.ssh/id_rsa
+echo $?
 display checking the keys from openssh backup files...
 ./run.sh ~/.ssh/bak/id_rsa
 display restoring the backup files for normal usage...

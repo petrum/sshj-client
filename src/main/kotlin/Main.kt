@@ -188,6 +188,7 @@ fun main(args: Array<String>) {
             exitProcess(0)
         }
         System.out.print(executeRemote(args[0], args[1].toInt(), args[2], priKeyFile, args[4]))
+        exitProcess(0)
     }
     catch (e: Exception) {
         log.error(e.toString())
