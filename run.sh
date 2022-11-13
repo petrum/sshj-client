@@ -10,5 +10,7 @@ zip -d $JAR 'META-INF/*SF'
 #    KEY=/home/petrum/.ssh/id_rsa
 #fi
 KEY=~/.ssh/id_rsa
+if [[ $1 != '' ]]; then
+  KEY=$1
+fi
 java -Dkotlin-logging.throwOnMessageError -cp $JAR MainKt www.petrum.net 22223 petrum $KEY 'uname -a'
-
