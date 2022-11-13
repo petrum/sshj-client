@@ -192,7 +192,7 @@ fun main(args: Array<String>) {
             log.info("generated the keys, exiting...")
             exitProcess(0)
         }
-        System.out.println(executeRemote(args[0], args[1].toInt(), args[2], priKeyFile, args[4]))
+        System.out.print(executeRemote(args[0], args[1].toInt(), args[2], priKeyFile, args[4]))
     }
     catch (e: Exception) {
         log.error(e.toString())
