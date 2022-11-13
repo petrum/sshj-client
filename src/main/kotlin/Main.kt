@@ -3,6 +3,7 @@ import mu.KotlinLogging
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.common.IOUtils
 import net.schmizz.sshj.userauth.keyprovider.KeyPairWrapper
+import net.schmizz.sshj.userauth.keyprovider.KeyProvider
 import java.io.*
 import java.math.BigInteger
 import java.security.*
@@ -126,13 +127,15 @@ fun savePriKey(k: PrivateKey, f: String) {
 
 fun auth(client: SSHClient, username: String, f: String)
 {
-    //val key: KeyProvider = client.loadKeys(f)
-
-    //val key = PKCS8KeyFile()
-    //key.init((File(s)))
-
-    val kp = KeyPair(loadPubKey(pri2pub(f)), loadPriKey(f))
-    client.authPublickey(username, KeyPairWrapper(kp))
+    val text = File(f).readText(Charsets.UTF_8)
+    if (text.contains("OPENSSH")) {
+        val kp: KeyProvider = client.loadKeys(f)
+        client.authPublickey(username, kp)
+    }
+    else {
+        val kp = KeyPair(loadPubKey(pri2pub(f)), loadPriKey(f))
+        client.authPublickey(username, KeyPairWrapper(kp))
+    }
 }
 fun pri2pub(s: String): String {
     val f = File(s)
