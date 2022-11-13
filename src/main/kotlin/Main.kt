@@ -14,7 +14,6 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
 
-
 private val log = KotlinLogging.logger {}
 
 //https://blog.oddbit.com/post/2011-05-08-converting-openssh-public-keys

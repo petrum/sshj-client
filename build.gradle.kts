@@ -20,7 +20,6 @@ dependencies {
     implementation("com.hierynomus:sshj:0.34.0")
     implementation("org.slf4j:slf4j-simple:2.0.3")
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.3")
-    implementation("org.bouncycastle:bcprov-jdk15on:1.70")
     testImplementation(kotlin("test"))
 }
 
