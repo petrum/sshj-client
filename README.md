@@ -1,4 +1,6 @@
 # sshj-client
+
+### First Kotlin project
 1. create a Kotlin project in IntelliJ IDEA, with the wizard, using gradle
 2. added the sshj client code in Main.kt
 3. in build.gradle.kts file press Alt + Ins, then type "sshj" in search, add this dependency, as well as "slf4j-simple" (used by sshj):
@@ -40,3 +42,17 @@ Program arguments: www.petrum.net, 22223, petrum, /mnt/c/Users/petru/.ssh/id_rsa
 < session channel: id=0, recipient=0, localWin=[winSize=2097049], remoteWin=[winSize=2097152] >
 Linux nuc 5.15.0-52-generic #58-Ubuntu SMP Thu Oct 13 08:03:55 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
 ```
+
+
+### Next steps
+1. Use sshj lib to autheticate using password: done
+2. Using sshj to connect with public key using existing id_rsa/id_rsa.pub: done
+3. Generate the key files using java security libraries, and then connect using ssh: done
+4. using same generated key files to connect from java/sshj: done, but this I struggled with most
+   1. At first it was so strange as the `sshj` generated files did work from external `ssh`
+   2. I wanted to use java security libraries, and avoid bouncycastle cradle dependencies 
+   3. Then I hoped using bouncycastle library will sole the issue, but it didn't (actually I got same authentication errors)
+   4. Issue was the `client.loadkeys(file)` that didn't load the keys as expected
+   5. I was able to solve it by creating my own function to load the keys from key files
+
+
