@@ -2,7 +2,6 @@
 import mu.KotlinLogging
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.common.IOUtils
-import net.schmizz.sshj.transport.verification.PromiscuousVerifier
 import net.schmizz.sshj.userauth.keyprovider.KeyPairWrapper
 import java.io.*
 import java.math.BigInteger
@@ -163,8 +162,8 @@ fun main(args: Array<String>) {
             exitProcess(0)
         }
         val ssh = SSHClient()
-        //ssh.loadKnownHosts()
-        ssh.addHostKeyVerifier(PromiscuousVerifier())
+        ssh.loadKnownHosts()
+        //ssh.addHostKeyVerifier(PromiscuousVerifier())
         ssh.connect(args[0], args[1].toInt())
         try {
             auth(ssh, args[2], priKFile)
