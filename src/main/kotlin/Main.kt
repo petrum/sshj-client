@@ -192,5 +192,5 @@ fun main(args: Array<String>) {
     catch (e: Exception) {
         log.error(e.toString())
     }
-    exitProcess(-2
+    exitProcess(-2)
 }
