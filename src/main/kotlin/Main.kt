@@ -174,6 +174,17 @@ fun executeRemote(host: String, port: Int, username: String, priKeyFile: String,
         ssh.disconnect()
     }
 }
+
+fun printRed(s: String) {
+    // Everything after this is in red
+    val red = "\u001b[31m"
+    // Resets previous color codes
+    val reset = "\u001b[0m"
+    print(red)
+    print(s)
+    print(reset)
+}
+
 fun main(args: Array<String>) {
     try {
         log.info("Program arguments: ${args.joinToString()}")
@@ -191,11 +202,9 @@ fun main(args: Array<String>) {
             exitProcess(0)
         }
         val res = executeRemote(args[0], args[1].toInt(), args[2], priKeyFile, args[4])
-        if (res.first == 0 && res.third.isNotEmpty()) {
-            print(res.second.toString())
-        } else {
-            print(res.toString())
-        }
+        print("code = ${res.first}: ")
+        print(res.second)
+        printRed(res.third)
         exitProcess(0)
     }
     catch (e: Exception) {

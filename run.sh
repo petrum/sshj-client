@@ -7,4 +7,4 @@ if unzip -l $JAR | grep 'META-INF/.*SF' ; then
   zip -q -d $JAR 'META-INF/*SF'
 fi
 KEY=$1
-java -Dkotlin-logging.throwOnMessageError -cp $JAR MainKt www.petrum.net 22223 petrum $KEY 'uname1'
+java -Dkotlin-logging.throwOnMessageError -cp $JAR MainKt www.petrum.net 22223 petrum $KEY 'uname'
