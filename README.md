@@ -54,5 +54,7 @@ Linux nuc 5.15.0-52-generic #58-Ubuntu SMP Thu Oct 13 08:03:55 UTC 2022 x86_64 x
    3. Then I hoped using bouncycastle library will sole the issue, but it didn't (actually I got same authentication errors)
    4. Issue was the `client.loadkeys(file)` that didn't load the keys as expected
    5. I was able to solve it by creating my own function to load the keys from key files
+   6. so if the private key contains `OPENSSH` I use the `loadkeys()` otherwise I load the keys manually from file
+   
 
 
