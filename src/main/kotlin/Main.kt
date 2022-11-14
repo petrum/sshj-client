@@ -151,8 +151,6 @@ fun genKeys(f: String)
 
     savePubKey(kp.public, pri2pub(f))
     savePriKey(kp.private, f)
-
-    log.info("generated the keys")
 }
 
 fun executeRemote(host: String, port: Int, username: String, priKeyFile: String, cmdStr: String): String {
@@ -188,6 +186,7 @@ fun main(args: Array<String>) {
         if (!f.exists()) {
             log.info("The file '${f}' doesn't exists, generating new keys...")
             genKeys(priKeyFile)
+            log.info("generated the keys, exiting...")
             exitProcess(0)
         }
         System.out.println(executeRemote(args[0], args[1].toInt(), args[2], priKeyFile, args[4]))
