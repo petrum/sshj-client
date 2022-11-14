@@ -55,6 +55,18 @@ Linux nuc 5.15.0-52-generic #58-Ubuntu SMP Thu Oct 13 08:03:55 UTC 2022 x86_64 x
    4. Issue was the `client.loadkeys(file)` that didn't load the keys as expected
    5. I was able to solve it by creating my own function to load the keys from key files
    6. so if the private key contains `OPENSSH` I use the `loadkeys()` otherwise I load the keys manually from file
-   
 
 
+```
+petrum@gram ~/sshj-client[master]$ ./rerun.sh
+- this will just regenerate new keys as they are missing...
+- it appends the new pub key to the remote server...
+- it checks if new sshj created keys work with ssh...
+  Linux
+- it uses the new keys from new created files...
+  Linux
+- it uses the keys from openssh backup files...
+  Linux
+- it restores the backup files for normal usage...
+  Done
+```
