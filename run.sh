@@ -1,5 +1,4 @@
 #/bin/bash
-
 SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd $SRC
 JAR=out/artifacts/sshj_client_main_jar/sshj-client.main.jar
