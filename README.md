@@ -45,7 +45,7 @@ Linux nuc 5.15.0-52-generic #58-Ubuntu SMP Thu Oct 13 08:03:55 UTC 2022 x86_64 x
 
 
 ### Next steps
-1. Use sshj lib to autheticate using password: done
+1. Use sshj lib to authenticate with password: done
 2. Using sshj to connect with public key using existing id_rsa/id_rsa.pub: done
 3. Generate the key files using java security libraries, and then connect using ssh: done
 4. using same generated key files to connect from java/sshj: done, but this I struggled with most
