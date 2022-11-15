@@ -46,15 +46,15 @@ Linux nuc 5.15.0-52-generic #58-Ubuntu SMP Thu Oct 13 08:03:55 UTC 2022 x86_64 x
 
 ### Next steps
 1. Use sshj lib to authenticate with password: done
-2. Using sshj to connect with public key using existing id_rsa/id_rsa.pub: done
-3. Generate the key files using java security libraries, and then connect using ssh: done
-4. using same generated key files to connect from java/sshj: done, but this I struggled with most
-   1. At first it was so strange as the `sshj` generated files did work from external `ssh`
+2. Using sshj to connect with public key from existing id_rsa/id_rsa.pub: done
+3. Generate new key files using java native security libraries, and then connect using ssh: done
+4. using the same generated key files in step #3 to connect programatically with sshj: done, but this I struggled with with most:
+   1. At first it was strange as the `sshj` generated files did work with external `ssh`
    2. I wanted to use java security libraries, and avoid bouncycastle cradle dependencies 
-   3. Then I hoped using bouncycastle library will sole the issue, but it didn't (actually I got same authentication errors)
-   4. Issue was the `client.loadkeys(file)` that didn't load the keys as expected
-   5. I was able to solve it by creating my own function to load the keys from key files
-   6. so if the private key contains `OPENSSH` I use the `loadkeys()` otherwise I load the keys manually from file
+   3. Then Igave up and I hoped using bouncycastle library will solve the issue, but it didn't (actually I got same authentication errors like before)
+   4. It turna out the issue was the `client.loadkeys(file)` call that didn't load the keys as expected
+   5. I was able to solve it by creating my own functions to load the keys from key files
+   6. final solution: if the private key contains `OPENSSH` (generated wihh `ssh-keygen`) I use the `loadkeys()`, otherwise I load the keys with my own loading functions from file
 
 
 ```
