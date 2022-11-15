@@ -5,6 +5,7 @@ import net.schmizz.sshj.userauth.keyprovider.KeyPairWrapper
 import net.schmizz.sshj.userauth.keyprovider.KeyProvider
 import java.io.*
 import java.math.BigInteger
+import java.net.URL
 import java.security.*
 import java.security.interfaces.RSAPublicKey
 import java.security.spec.PKCS8EncodedKeySpec
@@ -185,6 +186,13 @@ fun printRed(s: String) {
     print(reset)
 }
 
+fun downloadFile(url: String): String {
+    log.info("getting from url... ", url)
+    val ret = URL(url).readText()
+    log.info("got ${ret.length} bytes characters", ret)
+    return ret
+}
+
 fun main(args: Array<String>) {
     try {
         log.info("Program arguments: ${args.joinToString()}")
@@ -205,6 +213,7 @@ fun main(args: Array<String>) {
         print("code = ${res.first}: ")
         print(res.second)
         printRed(res.third)
+        downloadFile("https://www.dropbox.com/s/rb853fyb2d31f1k/commands.json?dl=1")
         exitProcess(0)
     }
     catch (e: Exception) {
