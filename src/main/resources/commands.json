@@ -1,0 +1,14 @@
+{
+    "servers":[
+        {"name": "www.petrum.net", "port": 22223, "user": "petrum",
+         "commands":[
+           {"name": "test 5", "cmd": "bin/test 5"},
+           {"name": "test 15", "cmd": "bin/test 15"},
+           {"name": "uname", "cmd": "uname -a"},
+           {"name": "reboot", "cmd": "sudo /sbin/reboot"},
+           {"name": "sleep 5", "cmd": "sleep 5"},
+           {"name": "ls none", "cmd": "ls none"},
+           {"name": "ls -ltr", "cmd": "ls -ltr"}
+        ]}],
+  "cols": 4
+}
