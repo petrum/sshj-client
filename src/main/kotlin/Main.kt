@@ -222,7 +222,6 @@ fun main(args: Array<String>) {
         print(res.second)
         printRed(res.third)
         downloadFile("https://www.dropbox.com/s/rb853fyb2d31f1k/commands.json?dl=1")
-        //getClass().getResourceAsStream("/file.txt");
 
         val s = Thread.currentThread().contextClassLoader.getResourceAsStream("commands.json")!!.bufferedReader().readText()
         //print("text from file:\n'$s'")
