@@ -198,7 +198,7 @@ fun downloadFile(url: String): String {
 
 fun s2json(s: String) {
     val jsonObject = JSONObject(s)
-    println(jsonObject.isEmpty)
+    log.info(jsonObject.toString())
 }
 
 fun main(args: Array<String>) {
@@ -222,10 +222,10 @@ fun main(args: Array<String>) {
         print(res.second)
         printRed(res.third)
         downloadFile("https://www.dropbox.com/s/rb853fyb2d31f1k/commands.json?dl=1")
-
-        val s = Thread.currentThread().contextClassLoader.getResourceAsStream("commands.json")!!.bufferedReader().readText()
-        //print("text from file:\n'$s'")
-        s2json(s)
+        val jsonTest = "commands.json"
+        val jsonText = Thread.currentThread().contextClassLoader.getResourceAsStream(jsonTest)!!.bufferedReader().readText()
+        log.info("text read from file '$jsonTest':\n$jsonText")
+        s2json(jsonText)
         exitProcess(0)
     }
     catch (e: Exception) {
