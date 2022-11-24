@@ -18,8 +18,9 @@ repositories {
 
 dependencies {
     implementation("com.hierynomus:sshj:0.34.0")
-    implementation("org.slf4j:slf4j-simple:2.0.3")
-    implementation("io.github.microutils:kotlin-logging-jvm:3.0.3")
+    implementation("org.slf4j:slf4j-simple:2.0.4")
+    implementation("io.github.microutils:kotlin-logging-jvm:3.0.4")
+    implementation("org.json:json:20220924")
     testImplementation(kotlin("test"))
 }
 

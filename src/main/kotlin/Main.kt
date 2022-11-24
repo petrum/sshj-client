@@ -1,8 +1,11 @@
+
 import mu.KotlinLogging
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.common.IOUtils
 import net.schmizz.sshj.userauth.keyprovider.KeyPairWrapper
 import net.schmizz.sshj.userauth.keyprovider.KeyProvider
+import org.json.Cookie
+import org.json.JSONObject
 import java.io.*
 import java.math.BigInteger
 import java.net.URL
@@ -13,6 +16,7 @@ import java.security.spec.RSAPublicKeySpec
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
+
 
 private val log = KotlinLogging.logger {}
 
@@ -187,10 +191,15 @@ fun printRed(s: String) {
 }
 
 fun downloadFile(url: String): String {
-    log.info("getting from url... ", url)
+    log.info("getting from url '$url'... ")
     val ret = URL(url).readText()
     log.info("got ${ret.length} bytes characters", ret)
     return ret
+}
+
+fun s2json(s: String) {
+    val jsonObject: JSONObject = Cookie.toJSONObject(s)
+    print(jsonObject)
 }
 
 fun main(args: Array<String>) {
@@ -214,6 +223,11 @@ fun main(args: Array<String>) {
         print(res.second)
         printRed(res.third)
         downloadFile("https://www.dropbox.com/s/rb853fyb2d31f1k/commands.json?dl=1")
+        //getClass().getResourceAsStream("/file.txt");
+
+        val s = Thread.currentThread().contextClassLoader.getResourceAsStream("commands.json")!!.bufferedReader().readText()
+        print("text from file:\n'$s'")
+        s2json(s)
         exitProcess(0)
     }
     catch (e: Exception) {
