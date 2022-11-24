@@ -4,7 +4,6 @@ import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.common.IOUtils
 import net.schmizz.sshj.userauth.keyprovider.KeyPairWrapper
 import net.schmizz.sshj.userauth.keyprovider.KeyProvider
-import org.json.Cookie
 import org.json.JSONObject
 import java.io.*
 import java.math.BigInteger
@@ -198,8 +197,8 @@ fun downloadFile(url: String): String {
 }
 
 fun s2json(s: String) {
-    val jsonObject: JSONObject = Cookie.toJSONObject(s)
-    print(jsonObject)
+    val jsonObject = JSONObject(s)
+    println(jsonObject.isEmpty)
 }
 
 fun main(args: Array<String>) {
@@ -226,7 +225,7 @@ fun main(args: Array<String>) {
         //getClass().getResourceAsStream("/file.txt");
 
         val s = Thread.currentThread().contextClassLoader.getResourceAsStream("commands.json")!!.bufferedReader().readText()
-        print("text from file:\n'$s'")
+        //print("text from file:\n'$s'")
         s2json(s)
         exitProcess(0)
     }
