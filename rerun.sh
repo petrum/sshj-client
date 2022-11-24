@@ -12,7 +12,7 @@ if [[ ! -f ~/.ssh/bak/id_rsa ]]; then
 fi
 
 display removing the keys...
-rm ~/.ssh/id_rsa* # it removes the keys so they'll be recreated
+rm -f ~/.ssh/id_rsa* # it removes the keys so they'll be recreated
 
 SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd $SRC
