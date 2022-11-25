@@ -77,6 +77,16 @@ fun loadPriKey(f: String): PrivateKey {
     return res
 }
 
+fun readNBytes(ds: DataInputStream, len: Int): ByteArray {
+    //return ds.readNBytes(len) // no supported in Java 11 used by Android Studio
+    val buffer = ByteArray(len)
+    val read = ds.read(buffer, 0, len)
+    if (read != len) {
+        throw Exception("Expected read $len bytes, but got $read instead")
+    }
+    return buffer
+}
+
 fun loadPubKey(f: String): PublicKey {
     val key = File(f).readText(Charsets.UTF_8)
     log.info("loading public key from '$f'")
@@ -89,11 +99,11 @@ fun loadPubKey(f: String): PublicKey {
     log.debug("public key PEM: '${publicKeyPEM}'")
     val ds = DataInputStream(ByteArrayInputStream(Base64.getDecoder().decode(publicKeyPEM)))
     val size1 = ds.readInt()
-    ds.readNBytes(size1)
+    readNBytes(ds, size1)
     val expSize = ds.readInt()
-    val exp = BigInteger(ds.readNBytes(expSize))
+    val exp = BigInteger(readNBytes(ds, expSize))
     val modulusSize = ds.readInt()
-    val modulus = BigInteger(ds.readNBytes(modulusSize))
+    val modulus = BigInteger(readNBytes(ds, modulusSize))
     log.info("size1 = $size1, expSize = $expSize, exp = $exp, modulusSize = $modulusSize, left = ${ds.available()}")
     if (ds.available() != 0) {
         throw Exception("still ${ds.available()} bytes left in the public key!")
