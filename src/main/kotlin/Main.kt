@@ -141,7 +141,8 @@ fun auth(client: SSHClient, username: String, f: String)
     }
 }
 
-fun pri2pub(s: String): String {
+fun pri2pub(s: String): String
+{
     val f = File(s)
     return "${f.parentFile.absolutePath}/id_rsa.pub"
 }
