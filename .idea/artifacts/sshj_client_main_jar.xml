@@ -18,9 +18,9 @@
       <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/simplelogger.properties" />
       <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/commands.json" />
       <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.json/json/20220924/5aa95e7688f76c664af205c5937620f02688dfbc/json-20220924.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/2.0.4/30d5eb5360bd113ce96f9e49e3431993bbf1b247/slf4j-api-2.0.4.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-simple/2.0.4/f37b4f485daba2c47f35337d8dd527b79f7678a7/slf4j-simple-2.0.4.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.microutils/kotlin-logging-jvm/3.0.4/fb66155bec41f7c2c8b9be53dbb7c191c83b9415/kotlin-logging-jvm-3.0.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/2.0.5/3a759df277e854f7c4ca951e5899bcec0dbdca73/slf4j-api-2.0.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-simple/2.0.5/4fcca6bbd0e0d5b9d80a3d034cd5c0e2df1e4d2e/slf4j-simple-2.0.5.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
