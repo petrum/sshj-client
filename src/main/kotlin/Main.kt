@@ -177,7 +177,7 @@ fun executeRemote(host: String, port: Int, username: String, priKeyFile: String,
         try {
             val cmd = session.exec(cmdStr)
             log.info(cmd.toString())
-            cmd.join(1, TimeUnit.SECONDS)
+            cmd.join(1000, TimeUnit.SECONDS)
             val out = IOUtils.readFully(cmd.inputStream).toString()
             val err = IOUtils.readFully(cmd.errorStream).toString()
             val code = cmd.exitStatus
