@@ -185,7 +185,12 @@ fun executeRemote(host: String, port: Int, username: String, priKeyFile: String,
         } finally {
             session.close()
         }
-    } finally {
+    }
+    catch (e: Exception) {
+        log.error(e.toString())
+        return Triple(-1, "", "")
+    }
+    finally {
         ssh.disconnect()
     }
 }
@@ -229,9 +234,10 @@ fun main(args: Array<String>) {
             exitProcess(0)
         }
         val res = executeRemote(args[0], args[1].toInt(), args[2], priKeyFile, args[4])
-        print("code = ${res.first}: ")
-        print(res.second)
-        printRed(res.third)
+        print("\tcode = ${res.first}: ")
+        print("'${res.second.trim()}', ")
+        printRed("'${res.third}'")
+        println()
         downloadFile("https://www.dropbox.com/s/rb853fyb2d31f1k/commands.json?dl=1")
         val jsonTest = "commands.json"
         val jsonText = Thread.currentThread().contextClassLoader.getResourceAsStream(jsonTest)!!.bufferedReader().readText()
